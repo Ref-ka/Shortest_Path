@@ -15,7 +15,7 @@ class Back:
         self.view.setup(self)
         self.view.start_main_loop()
 
-# Methods with info
+# Info methods
     def connection_check(self, var):
         return self.info.connection_check(var)
 
@@ -44,7 +44,7 @@ class Back:
     def get_src(self):
         return self.info.get_src()
 
-# Methods with view
+# View methods
     def load_file(self):
         load_file(self)
 
@@ -60,7 +60,7 @@ class Back:
     def get_answer_wfi(self):
         self.get_answer(True)
 
-# Methods with graph
+# Graph methods
     def make_graph_image(self, g):          # SO SLOW!!!
         #  Создаем визуализацию нашего графа
         g_vis = nx.DiGraph(directed=True)
