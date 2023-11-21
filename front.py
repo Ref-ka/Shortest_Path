@@ -192,7 +192,7 @@ class View:
             if path.exists('graph.png'):
                 remove('graph.png')
 
-            ans, history, buf = back.make_graph(back.get_vertexes_count(), back.get_connections(), back.get_src(), wfi)
+            ans, history, buf = back.make_graph(wfi)
 
             self.output_textbox_1.configure(state='normal')
             self.output_textbox_2.configure(state='normal')

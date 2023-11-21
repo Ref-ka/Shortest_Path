@@ -1,3 +1,6 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+from io import BytesIO
 from pandas import DataFrame, set_option
 from collections import deque
 
@@ -10,6 +13,35 @@ def make_matrix(dist, history) -> tuple:
     return DataFrame(list(x for x in dist)), history
 
 
+def make_image(g):          # SO SLOW!!!
+    #  Создаем визуализацию нашего графа
+    g_vis = nx.DiGraph(directed=True)
+
+    # Добавляем вершины и ребра в визуализацию
+    edge_labels = {}
+    for ver in g.graph:
+        g_vis.add_node(ver)
+    for ver1 in g.graph:
+        for line in g.graph[ver1]:
+            g_vis.add_edge(ver1, line[0])
+            edge_labels[(ver1, line[0])] = line[1]
+
+    # Задаём позиционирование графа
+    pos = nx.shell_layout(g_vis)
+
+    # Отрисовываем граф и значения ребер, сохраняем изображение графа
+    nx.draw(g_vis, pos, with_labels=True, node_color='#29BCFF', node_size=1250)
+
+    nx.draw_networkx_edge_labels(g_vis, pos, edge_labels=edge_labels,
+                                 font_size=9, font_color='#151E3D', label_pos=0.3,
+                                 bbox=dict(facecolor='white', edgecolor='none', pad=0.5))
+
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    plt.clf()
+    return buf
+
+
 class Graph:
 
     # Иницилизируем объект класса Graph
@@ -17,6 +49,8 @@ class Graph:
     def __init__(self, vertices):
         self.V = vertices
         self.graph = {}
+        self.dist = []
+        self.history = []
 
     # Метод добавления ребра в граф
 
@@ -28,30 +62,27 @@ class Graph:
 
     # Метод отображения ответа
 
-    def print_spfa(self, dist):
-        ans = 'Расстояние\n от выбранной вершины\n до остальных\n'
-        for i in range(self.V):
-            ans += "% d \t\t % d" % (i, dist[i]) + '\n'
-        return ans
+    def make_answer(self):
+        matrices = make_matrix(self.dist, self.history)
+        return matrices[0], matrices[1], make_image(self)
 
     # Метод получения ответа, алгоритм поиска кратчайших путей
 
     def spfa(self, src):
-        dist = [float('inf')] * self.V
-        dist[src] = 0
+        self.dist = [float('inf')] * self.V
+        self.dist[src] = 0
         q = deque()
         q.append(src)
         counter = 0
-        dist_history = list()
-        dist_history.append(dist[:])
+        self.history.append(self.dist[:])
         length = {}
         while q:
             counter += 1
             u = q.popleft()
             if u in self.graph:
                 for v, w in self.graph[u]:
-                    if dist[u] != float('inf') and dist[u] + w < dist[v]:
-                        dist[v] = dist[u] + w
+                    if self.dist[u] != float('inf') and self.dist[u] + w < self.dist[v]:
+                        self.dist[v] = self.dist[u] + w
                         if v not in q:
                             q.append(v)
                             if v not in length:
@@ -61,25 +92,23 @@ class Graph:
                             if length[v] == self.V:
                                 return DataFrame(), ''
                             counter += 1
-            dist_history.append(dist[:])
-        return make_matrix(dist, dist_history)
+            self.history.append(self.dist[:])
+        return self.make_answer()
 
     def wfi(self):
-        dist = []
-
         for i in range(self.V):
-            dist.append([float('inf')] * self.V)
-            dist[i][i] = 0
+            self.dist.append([float('inf')] * self.V)
+            self.dist[i][i] = 0
 
         for i in self.graph:
             for j, k in self.graph[i]:
-                dist[i][j] = k
+                self.dist[i][j] = k
 
         for i in range(self.V):
             for j in range(self.V):
                 for k in range(self.V):
-                    if dist[k][k] < 0:
+                    if self.dist[k][k] < 0:
                         return DataFrame(), ''
-                    dist[j][k] = min(dist[j][k], dist[j][i] + dist[i][k])
+                    self.dist[j][k] = min(self.dist[j][k], self.dist[j][i] + self.dist[i][k])
 
-        return make_matrix(dist, '')
+        return self.make_answer()
