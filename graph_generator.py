@@ -1,5 +1,5 @@
 from random import randint
-from algorithm import Graph
+from graph_class import Graph
 from os import path
 
 # vertexes_count = int(input('Input the number of vertexes'))

@@ -1,5 +1,5 @@
 import networkx as nx
-from algorithm import Graph
+from graph_class import Graph
 import matplotlib.pyplot as plt
 from io import BytesIO
 from front import View, load_file
