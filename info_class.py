@@ -5,16 +5,16 @@ class Info:
         self.vertexes = {}
         self.src = None
 
-    def get_connections(self):
+    def get_connections(self) -> list:
         return self.connections
 
-    def get_vertexes_count(self):
+    def get_vertexes_count(self) -> int:
         return len(self.vertexes)
 
-    def get_vertexes(self):
+    def get_vertexes(self) -> dict:
         return self.vertexes
 
-    def get_src(self):
+    def get_src(self) -> int:
         return self.src
 
     def insert_connection(self, line):
@@ -36,7 +36,7 @@ class Info:
     def insert_src(self, src):
         self.src = src
 
-    def connection_check(self, line):
+    def connection_check(self, line) -> bool:
         if line in self.connections:
             return True
         else:

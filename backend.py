@@ -13,7 +13,7 @@ class Back:
         self.view.start_main_loop()
 
 # Info methods
-    def connection_check(self, var):
+    def connection_check(self, var) -> bool:
         return self.info.connection_check(var)
 
     def insert_connection(self, var):
@@ -26,19 +26,19 @@ class Back:
     def delete_connection(self, var):
         self.info.delete_connection(var)
 
-    def get_vertexes(self):
+    def get_vertexes(self) -> list:
         return self.info.get_vertexes()
 
-    def get_vertexes_count(self):
+    def get_vertexes_count(self) -> int:
         return self.info.get_vertexes_count()
 
     def insert_src(self, src):
         self.info.insert_src(src)
 
-    def get_connections(self):
+    def get_connections(self) -> list:
         return self.info.get_connections()
 
-    def get_src(self):
+    def get_src(self) -> int:
         return self.info.get_src()
 
 # View methods
@@ -64,7 +64,7 @@ class Back:
         for line in self.get_connections():
             g.add_edge(line[0], line[1], line[2])
         if not wfi:
-            return g.spfa(self.get_src())
+            return g.spfa(int(self.get_src()))
         else:
             return g.wfi()
 

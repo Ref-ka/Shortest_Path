@@ -13,7 +13,7 @@ def make_matrix(dist, history) -> tuple:
     return DataFrame(list(x for x in dist)), history
 
 
-def make_image(g):          # SO SLOW!!!
+def make_image(g) -> BytesIO:          # SO SLOW!!!
     #  Создаем визуализацию нашего графа
     g_vis = nx.DiGraph(directed=True)
 
@@ -62,13 +62,13 @@ class Graph:
 
     # Метод отображения ответа
 
-    def make_answer(self):
+    def make_answer(self) -> tuple:
         matrices = make_matrix(self.dist, self.history)
         return matrices[0], matrices[1], make_image(self)
 
     # Метод получения ответа, алгоритм поиска кратчайших путей
 
-    def spfa(self, src):
+    def spfa(self, src) -> tuple:
         self.dist = [float('inf')] * self.V
         self.dist[src] = 0
         q = deque()
@@ -95,7 +95,7 @@ class Graph:
             self.history.append(self.dist[:])
         return self.make_answer()
 
-    def wfi(self):
+    def wfi(self) -> tuple:
         for i in range(self.V):
             self.dist.append([float('inf')] * self.V)
             self.dist[i][i] = 0
