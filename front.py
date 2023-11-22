@@ -8,7 +8,7 @@ from tkinter import filedialog
 
 def make_new_window(text):
     problem_window = tk.CTkToplevel()
-    problem_window.geometry('300x100')
+    problem_window.geometry('450x100')
     problem_window.grab_set()
     problem_label = tk.CTkLabel(problem_window, font=tk.CTkFont('Gill Sans', 13, weight='bold'), text=text)
     problem_label.pack(pady=20)
@@ -156,22 +156,24 @@ class View:
             var = None
         finally:
             pass
-        if var and len(var) == 3:
-            if var[0] != var[1]:
-                if not back.connection_check(var):
-                    back.insert_connection(var)
-                    self.input_info_scrl.configure(
-                        text=self.input_info_scrl.cget('text') + ' '.join(str(x) for x in var) + '\n')
-                    if not file_var:
-                        self.input_entry.delete(0, 'end')
-                else:
-                    back.delete_connection(var)
-                    new_info = ''
-                    for line in back.get_connections():
-                        new_info += ' '.join(str(x) for x in line) + '\n'
-                    self.input_info_scrl.configure(text=new_info)
-                    if not file_var:
-                        self.input_entry.delete(0, 'end')
+        if var and len(var) == 3 and var[0] != var[1]:
+            if not back.connection_check(var):
+                back.insert_connection(var)
+                self.input_info_scrl.configure(
+                    text=self.input_info_scrl.cget('text') + ' '.join(str(x) for x in var) + '\n')
+                if not file_var:
+                    self.input_entry.delete(0, 'end')
+            else:
+                back.delete_connection(var)
+                new_info = ''
+                for line in back.get_connections():
+                    new_info += ' '.join(str(x) for x in line) + '\n'
+                self.input_info_scrl.configure(text=new_info)
+                if not file_var:
+                    self.input_entry.delete(0, 'end')
+        else:
+            make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
+                            'Вы можете очистить эти данные или продолжить работать с ними')
         self.vertex_count_info_label.configure(text=f'Количество вершин:\n{back.get_vertexes_count()}')
 
     def input_src_command(self, back):
