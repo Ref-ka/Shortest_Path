@@ -11,9 +11,6 @@ class Info:
     def get_vertexes_count(self):
         return len(self.vertexes)
 
-    def get_vertexes(self):
-        return self.vertexes
-
     def get_src(self):
         return self.src
 
