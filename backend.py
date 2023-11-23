@@ -3,6 +3,7 @@ from front import View
 from info_class import Info
 from tkinter import filedialog
 import time
+import cProfile
 
 
 class Back:
@@ -50,9 +51,14 @@ class Back:
             self.clear()
             with open(file_path, 'r') as file:
                 start = time.monotonic()
-                for line in file.readlines():
-                    self.input_connection_command(line.replace('\n', ''))
+                data = file.readlines()
+                for i, line in enumerate(data):
+                    if i == len(data) - 1:
+                        self.view.input_connection_command(self, line.replace('\n', ''), True)
+                    else:
+                        self.view.input_connection_command(self, line.replace('\n', ''))
                 print(f'load_connection_time: {time.monotonic() - start}')
+
     def input_connection_command(self, file_var=None):
         self.view.input_connection_command(self, file_var)
 
@@ -77,5 +83,6 @@ class Back:
             return g.wfi()
 
 
-back = Back(View(), Info())
-back.start()
+if __name__ == '__main__':
+    back = Back(View(), Info())
+    cProfile.run('back.start()', sort='cumtime')

@@ -1,3 +1,5 @@
+import time
+
 import networkx as nx
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -13,7 +15,7 @@ def make_matrix(dist, history) -> tuple:
     return DataFrame(list(x for x in dist)), history
 
 
-def make_image(g) -> BytesIO:          # SO SLOW!!!
+def make_image(g) -> BytesIO:
     #  Создаем визуализацию нашего графа
     g_vis = nx.DiGraph(directed=True)
 
@@ -29,13 +31,15 @@ def make_image(g) -> BytesIO:          # SO SLOW!!!
     # Задаём позиционирование графа
     pos = nx.shell_layout(g_vis)
 
-    # Отрисовываем граф и значения ребер, сохраняем изображение графа
+    # Отрисовываем граф и значения ребер, сохраняем изображение графа   # SO SLOW!!!
+    main_draw_start = time.monotonic()
     nx.draw(g_vis, pos, with_labels=True, node_color='#29BCFF', node_size=1250)
-
+    print(f'main_draw_time: {time.monotonic() - main_draw_start}')
+    edge_draw_start = time.monotonic()
     nx.draw_networkx_edge_labels(g_vis, pos, edge_labels=edge_labels,
                                  font_size=9, font_color='#151E3D', label_pos=0.3,
                                  bbox=dict(facecolor='white', edgecolor='none', pad=0.5))
-
+    print(f'edge_draw_time: {time.monotonic() - edge_draw_start}')
     buf = BytesIO()
     plt.savefig(buf, format='png')
     plt.clf()

@@ -135,7 +135,7 @@ class View:
 
     # Команда ввода
 
-    def input_connection_command(self, back, file_var=None):
+    def input_connection_command(self, back, file_var=None, last=None):
         try:
             if not file_var:
                 var = list(map(int, self.input_entry.get().split()))
@@ -149,9 +149,14 @@ class View:
         if var and len(var) == 3 and var[0] != var[1]:
             if not back.connection_check(var):
                 back.insert_connection(var)
-                self.input_info_scrl_label.configure(
-                    text=self.input_info_scrl_label.cget('text') + ' '.join(str(x) for x in var) + '\n')
+                if last:
+                    new_info = ''
+                    for line in back.get_connections():
+                        new_info += ' '.join(str(x) for x in line) + '\n'
+                    self.input_info_scrl_label.configure(text=new_info)
                 if not file_var:
+                    self.input_info_scrl_label.configure(
+                        text=self.input_info_scrl_label.cget('text') + ' '.join(str(x) for x in var) + '\n')
                     self.input_entry.delete(0, 'end')
             else:
                 back.delete_connection(var)
