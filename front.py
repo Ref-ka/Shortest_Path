@@ -3,7 +3,6 @@ import time
 import customtkinter as tk
 from PIL import Image
 from os import remove, path
-from tkinter import filedialog
 
 
 def make_new_window(text):
@@ -12,15 +11,6 @@ def make_new_window(text):
     problem_window.grab_set()
     problem_label = tk.CTkLabel(problem_window, font=tk.CTkFont('Gill Sans', 13, weight='bold'), text=text)
     problem_label.pack(pady=20)
-
-
-def load_file(back):
-    file_path = filedialog.askopenfilename()
-    if file_path:
-        back.clear()
-        with open(file_path, 'r') as file:
-            for line in file.readlines():
-                back.input_connection_command(line.replace('\n', ''))
 
 
 class View:
@@ -104,7 +94,7 @@ class View:
         # region
         input_info_label = tk.CTkLabel(input_frame, text='Здесь будет\nвведенная информация',
                                        font=tk.CTkFont('Gill Sans', 15, weight='bold'), text_color='#151E3D')
-        self.input_info_scrl = tk.CTkLabel(input_info_scrl_frame, text='',
+        self.input_info_scrl_label = tk.CTkLabel(input_info_scrl_frame, text='',
                                       font=tk.CTkFont('Courier New', 17, weight='bold'), text_color='#151E3D')
         output_label_1 = tk.CTkLabel(output_subframe_1, text='     Здесь будет ответ     ',
                                      font=tk.CTkFont('Gill Sans', 17, weight='bold'), text_color='#151E3D')
@@ -122,7 +112,7 @@ class View:
 
         input_info_label.grid(row=0, column=0, pady=10)
         output_label_1.grid(row=0, column=0, padx=30, pady=10, sticky='EWNS')
-        self.input_info_scrl.grid(padx=20, pady=10)
+        self.input_info_scrl_label.grid(padx=20, pady=10)
         entry_label.grid(row=4, pady=10)
         src_label.grid(row=7, pady=10)
         self.image_label.grid(row=0, pady=10, padx=10)
@@ -159,8 +149,8 @@ class View:
         if var and len(var) == 3 and var[0] != var[1]:
             if not back.connection_check(var):
                 back.insert_connection(var)
-                self.input_info_scrl.configure(
-                    text=self.input_info_scrl.cget('text') + ' '.join(str(x) for x in var) + '\n')
+                self.input_info_scrl_label.configure(
+                    text=self.input_info_scrl_label.cget('text') + ' '.join(str(x) for x in var) + '\n')
                 if not file_var:
                     self.input_entry.delete(0, 'end')
             else:
@@ -168,7 +158,7 @@ class View:
                 new_info = ''
                 for line in back.get_connections():
                     new_info += ' '.join(str(x) for x in line) + '\n'
-                self.input_info_scrl.configure(text=new_info)
+                self.input_info_scrl_label.configure(text=new_info)
                 if not file_var:
                     self.input_entry.delete(0, 'end')
         else:
@@ -221,7 +211,7 @@ class View:
             make_new_window('Вы не ввели некоторые данные!\n''Проверьте все колонки ввода!')
 
     def clear(self):
-        self.input_info_scrl.configure(text='')
+        self.input_info_scrl_label.configure(text='')
         self.src_info_label.configure(text='Начальная вершина:\n')
         self.vertex_count_info_label.configure(text='Количество вершин:\n')
         self.output_textbox_1.configure(state='normal')

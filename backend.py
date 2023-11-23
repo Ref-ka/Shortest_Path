@@ -1,6 +1,8 @@
 from graph_class import Graph
-from front import View, load_file
+from front import View
 from info_class import Info
+from tkinter import filedialog
+import time
 
 
 class Back:
@@ -43,8 +45,14 @@ class Back:
 
 # View methods
     def load_file(self):
-        load_file(self)
-
+        file_path = filedialog.askopenfilename()
+        if file_path:
+            self.clear()
+            with open(file_path, 'r') as file:
+                start = time.monotonic()
+                for line in file.readlines():
+                    self.input_connection_command(line.replace('\n', ''))
+                print(f'load_connection_time: {time.monotonic() - start}')
     def input_connection_command(self, file_var=None):
         self.view.input_connection_command(self, file_var)
 
