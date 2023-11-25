@@ -33,7 +33,7 @@ def make_image(g) -> BytesIO:
 
     # Отрисовываем граф и значения ребер, сохраняем изображение графа   # SO SLOW!!!
     main_draw_start = time.monotonic()
-    nx.draw(g_vis, pos, with_labels=True, node_color='#29BCFF', node_size=1250)
+    nx.draw(g_vis, pos, with_labels=True, node_color='#29BCFF', node_size=700)
     print(f'main_draw_time: {time.monotonic() - main_draw_start}')
     edge_draw_start = time.monotonic()
     nx.draw_networkx_edge_labels(g_vis, pos, edge_labels=edge_labels,
