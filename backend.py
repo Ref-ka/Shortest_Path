@@ -73,14 +73,15 @@ class Back:
 
 # Graph methods
     def make_graph(self, wfi) -> tuple:
+        draw = self.view.draw_switch.get()
         #  Создаем объект класса Graph и получаем ответ
         g = Graph(self.get_vertexes_count())
         for line in self.get_connections():
             g.add_edge(line[0], line[1], line[2])
         if not wfi:
-            return g.spfa(int(self.get_src()))
+            return g.spfa(int(self.get_src()), draw)
         else:
-            return g.wfi()
+            return g.wfi(draw)
 
 
 if __name__ == '__main__':

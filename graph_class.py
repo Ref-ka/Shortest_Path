@@ -41,7 +41,9 @@ def make_image(g) -> BytesIO:
                                  bbox=dict(facecolor='white', edgecolor='none', pad=0.5))
     print(f'edge_draw_time: {time.monotonic() - edge_draw_start}')
     buf = BytesIO()
+    save_figure_start = time.monotonic()
     plt.savefig(buf, format='png')
+    print(f'save_figure_time: {time.monotonic() - save_figure_start}')
     plt.clf()
     return buf
 
@@ -66,13 +68,16 @@ class Graph:
 
     # Метод отображения ответа
 
-    def make_answer(self) -> tuple:
+    def make_answer(self, draw) -> tuple:
         matrices = make_matrix(self.dist, self.history)
-        return matrices[0], matrices[1], make_image(self)
+        if draw:
+            return matrices[0], matrices[1], None
+        else:
+            return matrices[0], matrices[1], make_image(self)
 
     # Метод получения ответа, алгоритм поиска кратчайших путей
 
-    def spfa(self, src) -> tuple:
+    def spfa(self, src, draw) -> tuple:
         self.dist = [float('inf')] * self.V
         self.dist[src] = 0
         q = deque()
@@ -97,9 +102,9 @@ class Graph:
                                 return DataFrame(), ''
                             counter += 1
             self.history.append(self.dist[:])
-        return self.make_answer()
+        return self.make_answer(draw)
 
-    def wfi(self) -> tuple:
+    def wfi(self, draw) -> tuple:
         for i in range(self.V):
             self.dist.append([float('inf')] * self.V)
             self.dist[i][i] = 0
@@ -115,4 +120,4 @@ class Graph:
                         return DataFrame(), ''
                     self.dist[j][k] = min(self.dist[j][k], self.dist[j][i] + self.dist[i][k])
 
-        return self.make_answer()
+        return self.make_answer(draw)

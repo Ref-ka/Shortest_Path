@@ -133,6 +133,11 @@ class View:
         self.output_textbox_1.grid()
         self.output_textbox_2.grid()
 
+        # Switch
+        self.draw_switch = tk.CTkSwitch(input_frame, text='Отключить отрисовку графа')
+
+        self.draw_switch.grid(row=12)
+
     # Команда ввода
 
     def input_connection_command(self, back, file_var=None, last=None):
@@ -208,10 +213,9 @@ class View:
 
             self.output_textbox_1.configure(state='disable')
             self.output_textbox_2.configure(state='disable')
-            start_load = time.monotonic()
-            image = tk.CTkImage(dark_image=Image.open(buf), size=(700, 620))
-            self.image_label.configure(image=image)
-            print(f'load_time {time.monotonic() - start_load}')
+            if buf:
+                image = tk.CTkImage(dark_image=Image.open(buf), size=(700, 620))
+                self.image_label.configure(image=image)
         else:
             make_new_window('Вы не ввели некоторые данные!\n''Проверьте все колонки ввода!')
 
