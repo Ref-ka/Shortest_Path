@@ -134,9 +134,11 @@ class View:
         self.output_textbox_2.grid()
 
         # Switch
-        self.draw_switch = tk.CTkSwitch(input_frame, text='Отключить отрисовку графа')
+        self.draw_switch = tk.CTkSwitch(input_frame, text='Отключить отрисовку графа',
+                                        font=tk.CTkFont('Gill Sans', 15, weight='bold'), text_color='#151E3D',
+                                        progress_color='#29BCFF')
 
-        self.draw_switch.grid(row=12)
+        self.draw_switch.grid(row=12, pady=7)
 
     # Команда ввода
 
