@@ -193,9 +193,6 @@ class View:
     def get_answer(self, back, wfi=False):
         if (back.get_connections() and back.get_src()) or (back.get_connections() and wfi):
 
-            if path.exists('graph.png'):
-                remove('graph.png')
-
             ans, history, buf = back.make_graph(wfi)
 
             self.output_textbox_1.configure(state='normal')
