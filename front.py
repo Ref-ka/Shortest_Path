@@ -2,7 +2,6 @@ import time
 
 import customtkinter as tk
 from PIL import Image
-from os import remove, path
 
 
 def make_new_window(text):
