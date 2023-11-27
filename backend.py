@@ -26,6 +26,12 @@ class Back:
         self.info.clear()
         self.view.clear()
 
+    def get_answer(self):
+        self.view.get_answer(self)
+
+    def get_answer_wfi(self):
+        self.view.get_answer(self, True)
+
     def delete_connection(self, var):
         self.info.delete_connection(var)
 
@@ -64,12 +70,6 @@ class Back:
 
     def input_src_command(self):
         self.view.input_src_command(self)
-
-    def get_answer(self, wfi=None):
-        self.view.get_answer(self, wfi)
-
-    def get_answer_wfi(self):
-        self.get_answer(True)
 
 # Graph methods
     def make_graph(self, wfi) -> tuple:

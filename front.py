@@ -60,21 +60,24 @@ class View:
         input_src_button = tk.CTkButton(input_frame, text='Ввод', command=back.input_src_command, fg_color='#29BCFF',
                                         text_color='#151E3D',
                                         font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
-        ans_button = tk.CTkButton(input_frame, text='Рассчитать по spfa', command=back.get_answer, fg_color='#29BCFF',
-                                  text_color='#151E3D', font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
+        spfa_button = tk.CTkButton(input_frame, text='Рассчитать по spfa',
+                                   command=back.get_answer, fg_color='#29BCFF',
+                                   text_color='#151E3D', font=tk.CTkFont('Gill Sans', 13, weight='bold'),
+                                   hover_color='#1CA1DF')
         file_button = tk.CTkButton(output_subframe_3, text='Выбрать файл', command=back.load_file, fg_color='#29BCFF',
                                    text_color='#151E3D',
                                    font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
         clear_button = tk.CTkButton(output_subframe_3, text='Очистить всё', command=back.clear, fg_color='#29BCFF',
                                     text_color='#151E3D',
                                     font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
-        wfi_button = tk.CTkButton(input_frame, text='Рассчитать по wfi', command=back.get_answer_wfi, fg_color='#29BCFF',
+        wfi_button = tk.CTkButton(input_frame, text='Рассчитать по wfi',
+                                  command=back.get_answer_wfi, fg_color='#29BCFF',
                                   text_color='#151E3D',
                                   font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
 
         input_connection_button.grid(row=6, column=0, padx=30)
         input_src_button.grid(row=9, padx=30)
-        ans_button.grid(row=10, pady=30)
+        spfa_button.grid(row=10, pady=30)
         file_button.grid(row=1, pady=10)
         clear_button.grid(row=2, pady=10)
         wfi_button.grid(row=11)
