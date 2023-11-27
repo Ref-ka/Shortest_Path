@@ -91,8 +91,16 @@ class Back:
                             'Вы можете очистить эти данные или продолжить работать с ними')
         self.view.change_vertex_count_label(self.info.get_vertexes_count())
 
-    def input_src_command(self):
-        self.view.input_src_command(self)
+    def input_src_command(self, src):
+        try:
+            src = int(src)
+            if src in self.info.get_vertexes():
+                self.info.insert_src(src)
+                self.view.change_src_entry(src)
+            else:
+                make_new_window('Данной вершины нет в графе!')
+        except ValueError:
+            make_new_window('Данные введены неверно!')
 
 # Graph methods
     def make_graph(self, wfi) -> tuple:

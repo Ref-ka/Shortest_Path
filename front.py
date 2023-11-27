@@ -60,7 +60,9 @@ class View:
                                                fg_color='#29BCFF',
                                                text_color='#151E3D',
                                                font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
-        input_src_button = tk.CTkButton(input_frame, text='Ввод', command=back.input_src_command, fg_color='#29BCFF',
+        input_src_button = tk.CTkButton(input_frame, text='Ввод',
+                                        command=lambda: back.input_src_command(self.src_entry.get()),
+                                        fg_color='#29BCFF',
                                         text_color='#151E3D',
                                         font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
         spfa_button = tk.CTkButton(input_frame, text='Рассчитать по spfa',
@@ -155,15 +157,9 @@ class View:
     def change_vertex_count_label(self, amount):
         self.vertex_count_label.configure(text=f'Количество вершин:\n{amount}')
 
-    def input_src_command(self, back):
-        try:
-            src = int(self.src_entry.get())
-            if src in back.get_vertexes():
-                back.insert_src(self.src_entry.get())
-                self.src_entry.delete(0, 'end')
-                self.src_info_label.configure(text=f'Начальная вершина:\n{str(back.get_src())}')
-        except ValueError:
-            make_new_window('Данные введены неверно!')
+    def change_src_entry(self, src):
+        self.src_entry.delete(0, 'end')
+        self.src_info_label.configure(text=f'Начальная вершина:\n{str(src)}')
 
     # Команда получения ответа
 
