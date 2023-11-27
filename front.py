@@ -66,7 +66,7 @@ class View:
                                         text_color='#151E3D',
                                         font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
         spfa_button = tk.CTkButton(input_frame, text='Рассчитать по spfa',
-                                   command=back.get_answer, fg_color='#29BCFF',
+                                   command=lambda: back.get_answer(), fg_color='#29BCFF',
                                    text_color='#151E3D', font=tk.CTkFont('Gill Sans', 13, weight='bold'),
                                    hover_color='#1CA1DF')
         file_button = tk.CTkButton(output_subframe_3, text='Выбрать файл', command=back.load_file, fg_color='#29BCFF',
@@ -76,7 +76,7 @@ class View:
                                     text_color='#151E3D',
                                     font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
         wfi_button = tk.CTkButton(input_frame, text='Рассчитать по wfi',
-                                  command=back.get_answer_wfi, fg_color='#29BCFF',
+                                  command=lambda: back.get_answer(True), fg_color='#29BCFF',
                                   text_color='#151E3D',
                                   font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
 
@@ -163,33 +163,27 @@ class View:
 
     # Команда получения ответа
 
-    def get_answer(self, back, wfi=False):
-        if (back.get_connections() and back.get_src()) or (back.get_connections() and wfi):
+    def show_answer(self, ans, history, buf, wfi):
+        self.output_textbox_1.configure(state='normal')
+        self.output_textbox_2.configure(state='normal')
 
-            ans, history, buf = back.make_graph(wfi)
+        self.output_textbox_1.delete('0.0', 'end')
+        self.output_textbox_2.delete('0.0', 'end')
 
-            self.output_textbox_1.configure(state='normal')
-            self.output_textbox_2.configure(state='normal')
+        if ans.empty:
+            ans = 'В графе есть\nотрицательный цикл!'
+        elif not wfi:
+            ans = ans.T
 
-            self.output_textbox_1.delete('0.0', 'end')
-            self.output_textbox_2.delete('0.0', 'end')
+        self.output_textbox_1.insert('0.0', ans)
 
-            if ans.empty:
-                ans = 'В графе есть\nотрицательный цикл!'
-            elif not wfi:
-                ans = ans.T
+        self.output_textbox_2.insert('0.0', history)
 
-            self.output_textbox_1.insert('0.0', ans)
-
-            self.output_textbox_2.insert('0.0', history)
-
-            self.output_textbox_1.configure(state='disable')
-            self.output_textbox_2.configure(state='disable')
-            if buf:
-                image = tk.CTkImage(dark_image=Image.open(buf), size=(700, 620))
-                self.image_label.configure(image=image)
-        else:
-            make_new_window('Вы не ввели некоторые данные!\n''Проверьте все колонки ввода!')
+        self.output_textbox_1.configure(state='disable')
+        self.output_textbox_2.configure(state='disable')
+        if buf:
+            image = tk.CTkImage(dark_image=Image.open(buf), size=(700, 620))
+            self.image_label.configure(image=image)
 
     def clear(self):
         self.input_info_scrl_label.configure(text='')

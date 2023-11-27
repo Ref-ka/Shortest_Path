@@ -22,12 +22,6 @@ class Back:
     def info_insert_connection(self, var):
         self.info.insert_connection(var)
 
-    def get_answer(self):
-        self.view.get_answer(self)
-
-    def get_answer_wfi(self):
-        self.view.get_answer(self, True)
-
     def info_delete_connection(self, var):
         self.info.delete_connection(var)
 
@@ -47,6 +41,13 @@ class Back:
         return self.info.get_src()
 
 # View methods
+    def get_answer(self, wfi=False):
+        if self.info.get_connections() and (self.info.get_src() != None or wfi):
+            ans, history, buf = back.make_graph(wfi)
+            self.view.show_answer(ans, history, buf, wfi)
+        else:
+            make_new_window('Вы не ввели некоторые данные!\n''Проверьте все колонки ввода!')
+
     def load_file(self):
         file_path = filedialog.askopenfilename()
         if file_path:
