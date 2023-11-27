@@ -54,7 +54,9 @@ class View:
 
         # Buttons
         # region
-        input_connection_button = tk.CTkButton(input_frame, text='Ввод', command=back.input_connection_command, fg_color='#29BCFF',
+        input_connection_button = tk.CTkButton(input_frame, text='Ввод',
+                                               command=lambda: back.input_connection_command(self.input_entry.get()),
+                                               fg_color='#29BCFF',
                                                text_color='#151E3D',
                                                font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
         input_src_button = tk.CTkButton(input_frame, text='Ввод', command=back.input_src_command, fg_color='#29BCFF',
@@ -67,7 +69,7 @@ class View:
         file_button = tk.CTkButton(output_subframe_3, text='Выбрать файл', command=back.load_file, fg_color='#29BCFF',
                                    text_color='#151E3D',
                                    font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
-        clear_button = tk.CTkButton(output_subframe_3, text='Очистить всё', command=back.clear, fg_color='#29BCFF',
+        clear_button = tk.CTkButton(output_subframe_3, text='Очистить всё', command=back.info_clear, fg_color='#29BCFF',
                                     text_color='#151E3D',
                                     font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
         wfi_button = tk.CTkButton(input_frame, text='Рассчитать по wfi',
@@ -107,7 +109,7 @@ class View:
         self.image_label = tk.CTkLabel(graph_vis_frame, text='', height=768, width=812)
         self.src_info_label = tk.CTkLabel(input_frame, text='Начальная вершина:\n',
                                      font=tk.CTkFont('Gill Sans', 15, weight='bold'), text_color='#151E3D')
-        self.vertex_count_info_label = tk.CTkLabel(input_frame, text='Количество вершин:\n',
+        self.vertex_count_label = tk.CTkLabel(input_frame, text='Количество вершин:\n',
                                               font=tk.CTkFont('Gill Sans', 15, weight='bold'), text_color='#151E3D')
         output_label_2 = tk.CTkLabel(output_subframe_2, text='Здесь будут шаги\nвыполнения алгоритма',
                                      font=tk.CTkFont('Gill Sans', 17, weight='bold'), text_color='#151E3D')
@@ -119,7 +121,7 @@ class View:
         src_label.grid(row=7, pady=10)
         self.image_label.grid(row=0, pady=10, padx=10)
         self.src_info_label.grid(row=2, pady=10)
-        self.vertex_count_info_label.grid(row=3, pady=10)
+        self.vertex_count_label.grid(row=3, pady=10)
         output_label_2.grid(row=0, column=0, padx=30, pady=10, sticky='EWNS')
         # endregion
 
@@ -142,43 +144,15 @@ class View:
 
         self.draw_switch.grid(row=12, pady=7)
 
-    # Команда ввода
-
-    def input_connection_command(self, back, file_var=None, last=None):
-        try:
-            if not file_var:
-                var = list(map(int, self.input_entry.get().split()))
-            else:
-                var = list(map(int, file_var.split()))
-        except ValueError:
-            make_new_window('Введенные или загруженные\nданные неверны!')
-            var = None
-        finally:
-            pass
-        if var and len(var) == 3 and var[0] != var[1]:
-            if not back.connection_check(var):
-                back.insert_connection(var)
-                if last:
-                    new_info = ''
-                    for line in back.get_connections():
-                        new_info += ' '.join(str(x) for x in line) + '\n'
-                    self.input_info_scrl_label.configure(text=new_info)
-                if not file_var:
-                    self.input_info_scrl_label.configure(
-                        text=self.input_info_scrl_label.cget('text') + ' '.join(str(x) for x in var) + '\n')
-                    self.input_entry.delete(0, 'end')
-            else:
-                back.delete_connection(var)
-                new_info = ''
-                for line in back.get_connections():
-                    new_info += ' '.join(str(x) for x in line) + '\n'
-                self.input_info_scrl_label.configure(text=new_info)
-                if not file_var:
-                    self.input_entry.delete(0, 'end')
+    def change_input_info_scrl_label(self, text, add=False):
+        if add:
+            self.input_info_scrl_label.configure(text=self.input_info_scrl_label.cget('text') + text)
         else:
-            make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
-                            'Вы можете очистить эти данные или продолжить работать с ними')
-        self.vertex_count_info_label.configure(text=f'Количество вершин:\n{back.get_vertexes_count()}')
+            self.input_info_scrl_label.configure(text=text)
+        self.input_entry.delete(0, 'end')
+
+    def change_vertex_count_label(self, amount):
+        self.vertex_count_label.configure(text=f'Количество вершин:\n{amount}')
 
     def input_src_command(self, back):
         try:
@@ -223,7 +197,7 @@ class View:
     def clear(self):
         self.input_info_scrl_label.configure(text='')
         self.src_info_label.configure(text='Начальная вершина:\n')
-        self.vertex_count_info_label.configure(text='Количество вершин:\n')
+        self.vertex_count_label.configure(text='Количество вершин:\n')
         self.output_textbox_1.configure(state='normal')
         self.output_textbox_2.configure(state='normal')
         self.output_textbox_1.delete('0.0', 'end')

@@ -1,5 +1,5 @@
 from graph_class import Graph
-from front import View
+from front import View, make_new_window
 from info_class import Info
 from tkinter import filedialog
 import time
@@ -65,8 +65,35 @@ class Back:
                         self.view.input_connection_command(self, line.replace('\n', ''))
                 print(f'load_connection_time: {time.monotonic() - start}')
 
-    def input_connection_command(self, file_var=None):
-        self.view.input_connection_command(self, file_var)
+    def input_connection_command(self, var, file_var=None, last=None):
+        try:
+            if not file_var:
+                var = list(map(int, var))
+            else:
+                var = list(map(int, file_var.split()))
+        except ValueError:
+            make_new_window('Введенные или загруженные\nданные неверны!')
+            var = None
+        if var and len(var) == 3 and var[0] != var[1]:
+            if not self.info.connection_check(var):
+                self.info.insert_connection(var)
+                if last:
+                    new_info = ''
+                    for line in self.info.get_connections():
+                        new_info += ' '.join(str(x) for x in line) + '\n'
+                    self.view.change_input_info_scrl_label(new_info)
+                if not file_var:
+                    self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
+            else:
+                self.info.delete_connection(var)
+                new_info = ''
+                for line in self.info.get_connections():
+                    new_info += ' '.join(str(x) for x in line) + '\n'
+                self.view.change_input_info_scrl_label(new_info)
+        else:
+            make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
+                            'Вы можете очистить эти данные или продолжить работать с ними')
+        self.view.change_vertex_count_label(self.info.get_vertexes_count())
 
     def input_src_command(self):
         self.view.input_src_command(self)
