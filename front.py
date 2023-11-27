@@ -55,7 +55,8 @@ class View:
         # Buttons
         # region
         input_connection_button = tk.CTkButton(input_frame, text='Ввод',
-                                               command=lambda: back.input_connection_command(self.input_entry.get()),
+                                               command=lambda:
+                                               back.input_connection_command(self.input_entry.get().split()),
                                                fg_color='#29BCFF',
                                                text_color='#151E3D',
                                                font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
@@ -69,7 +70,7 @@ class View:
         file_button = tk.CTkButton(output_subframe_3, text='Выбрать файл', command=back.load_file, fg_color='#29BCFF',
                                    text_color='#151E3D',
                                    font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
-        clear_button = tk.CTkButton(output_subframe_3, text='Очистить всё', command=back.info_clear, fg_color='#29BCFF',
+        clear_button = tk.CTkButton(output_subframe_3, text='Очистить всё', command=back.clear, fg_color='#29BCFF',
                                     text_color='#151E3D',
                                     font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
         wfi_button = tk.CTkButton(input_frame, text='Рассчитать по wfi',

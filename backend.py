@@ -22,10 +22,6 @@ class Back:
     def info_insert_connection(self, var):
         self.info.insert_connection(var)
 
-    def info_clear(self):
-        self.info.clear()
-        self.view.clear()
-
     def get_answer(self):
         self.view.get_answer(self)
 
@@ -54,15 +50,15 @@ class Back:
     def load_file(self):
         file_path = filedialog.askopenfilename()
         if file_path:
-            self.info_clear()
+            self.clear()
             with open(file_path, 'r') as file:
                 start = time.monotonic()
                 data = file.readlines()
                 for i, line in enumerate(data):
                     if i == len(data) - 1:
-                        self.view.input_connection_command(self, line.replace('\n', ''), True)
+                        self.input_connection_command(self, line.replace('\n', ''), True)
                     else:
-                        self.view.input_connection_command(self, line.replace('\n', ''))
+                        self.input_connection_command(self, line.replace('\n', ''))
                 print(f'load_connection_time: {time.monotonic() - start}')
 
     def input_connection_command(self, var, file_var=None, last=None):
@@ -109,6 +105,11 @@ class Back:
             return g.spfa(int(self.info_get_src()), draw)
         else:
             return g.wfi(draw)
+
+# Global methods
+    def clear(self):
+        self.info.clear()
+        self.view.clear()
 
 
 if __name__ == '__main__':
