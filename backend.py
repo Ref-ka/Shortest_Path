@@ -15,34 +15,8 @@ class Back:
         self.view.setup(self)
         self.view.start_main_loop()
 
-# Info methods
-    def info_connection_check(self, var) -> bool:
-        return self.info.connection_check(var)
-
-    def info_insert_connection(self, var):
-        self.info.insert_connection(var)
-
-    def info_delete_connection(self, var):
-        self.info.delete_connection(var)
-
-    def info_get_vertexes(self) -> list:
-        return self.info.get_vertexes()
-
-    def info_get_vertexes_count(self) -> int:
-        return self.info.get_vertexes_count()
-
-    def info_insert_src(self, src):
-        self.info.insert_src(src)
-
-    def info_get_connections(self) -> list:
-        return self.info.get_connections()
-
-    def info_get_src(self) -> int:
-        return self.info.get_src()
-
-# View methods
     def get_answer(self, wfi=False):
-        if self.info.get_connections() and (self.info.get_src() != None or wfi):
+        if self.info.get_connections() and ((self.info.get_src() is not None) or wfi):
             ans, history, buf = back.make_graph(wfi)
             self.view.show_answer(ans, history, buf, wfi)
         else:
@@ -103,19 +77,16 @@ class Back:
         except ValueError:
             make_new_window('Данные введены неверно!')
 
-# Graph methods
     def make_graph(self, wfi) -> tuple:
         draw = self.view.draw_switch.get()
-        #  Создаем объект класса Graph и получаем ответ
-        g = Graph(self.info_get_vertexes_count())
-        for line in self.info_get_connections():
+        g = Graph(self.info.get_vertexes_count())
+        for line in self.info.get_connections():
             g.add_edge(line[0], line[1], line[2])
         if not wfi:
-            return g.spfa(int(self.info_get_src()), draw)
+            return g.spfa(int(self.info.get_src()), draw)
         else:
             return g.wfi(draw)
 
-# Global methods
     def clear(self):
         self.info.clear()
         self.view.clear()
