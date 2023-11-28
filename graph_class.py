@@ -1,5 +1,3 @@
-import time
-
 import networkx as nx
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -16,11 +14,9 @@ def make_matrix(dist, history) -> tuple:
 
 
 def make_image(g) -> BytesIO:
-    #  Создаем визуализацию нашего графа
-    g_vis = nx.DiGraph(directed=True)
+    g_vis = nx.DiGraph(directed=True)  # Make visualisation
 
-    # Добавляем вершины и ребра в визуализацию
-    edge_labels = {}
+    edge_labels = {}  # Add vertexes and edges to visualisation
     for ver in g.graph:
         g_vis.add_node(ver)
     for ver1 in g.graph:
@@ -28,15 +24,14 @@ def make_image(g) -> BytesIO:
             g_vis.add_edge(ver1, line[0])
             edge_labels[(ver1, line[0])] = line[1]
 
-    # Задаём позиционирование графа
-    pos = nx.shell_layout(g_vis)
+    pos = nx.shell_layout(g_vis)  # Make a position layout for visualisation
 
-    # Отрисовываем граф и значения ребер, сохраняем изображение графа   # SO SLOW!!!
-    nx.draw(g_vis, pos, with_labels=True, node_color='#29BCFF', node_size=700)
+    nx.draw(g_vis, pos, with_labels=True, node_color='#29BCFF', node_size=700)  # Draw a graph
     nx.draw_networkx_edge_labels(g_vis, pos, edge_labels=edge_labels,
                                  font_size=9, font_color='#151E3D', label_pos=0.3,
                                  bbox=dict(facecolor='white', edgecolor='none', pad=0.5))
-    buf = BytesIO()
+
+    buf = BytesIO()  # Save a visualisation
     plt.savefig(buf, format='png')
     plt.clf()
     return buf
@@ -44,15 +39,11 @@ def make_image(g) -> BytesIO:
 
 class Graph:
 
-    # Иницилизируем объект класса Graph
-
     def __init__(self, vertices):
         self.V = vertices
         self.graph = {}
         self.dist = []
         self.history = []
-
-    # Метод добавления ребра в граф
 
     def add_edge(self, u, v, w):
         if u not in self.graph:
@@ -60,16 +51,12 @@ class Graph:
         self.graph[u].append([v, w])
         self.graph[u] = sorted(self.graph[u])
 
-    # Метод отображения ответа
-
     def make_answer(self, draw) -> tuple:
         matrices = make_matrix(self.dist, self.history)
         if draw:
             return matrices[0], matrices[1], None
         else:
             return matrices[0], matrices[1], make_image(self)
-
-    # Метод получения ответа, алгоритм поиска кратчайших путей
 
     def spfa(self, src, draw) -> tuple:
         self.dist = [float('inf')] * self.V
@@ -102,16 +89,13 @@ class Graph:
         for i in range(self.V):
             self.dist.append([float('inf')] * self.V)
             self.dist[i][i] = 0
-
         for i in self.graph:
             for j, k in self.graph[i]:
                 self.dist[i][j] = k
-
         for i in range(self.V):
             for j in range(self.V):
                 for k in range(self.V):
                     if self.dist[k][k] < 0:
                         return DataFrame(), ''
                     self.dist[j][k] = min(self.dist[j][k], self.dist[j][i] + self.dist[i][k])
-
         return self.make_answer(draw)
