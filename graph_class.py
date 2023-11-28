@@ -51,7 +51,9 @@ class Graph:
         self.graph[u].append([v, w])
         self.graph[u] = sorted(self.graph[u])
 
-    def make_answer(self, draw) -> tuple:
+    def make_answer(self, draw, negative_cycle=None) -> tuple:
+        if negative_cycle:
+            return DataFrame(), '', None
         matrices = make_matrix(self.dist, self.history)
         if draw:  # Check if we don't need a visualisation of graph
             return matrices[0], matrices[1], None
@@ -81,7 +83,7 @@ class Graph:
                             else:
                                 length[v] += 1
                             if length[v] == self.V:
-                                return DataFrame(), ''
+                                return self.make_answer(draw, True)
             self.history.append(self.dist[:])
         return self.make_answer(draw)
 
@@ -96,6 +98,6 @@ class Graph:
             for j in range(self.V):
                 for k in range(self.V):
                     if self.dist[k][k] < 0:
-                        return DataFrame(), ''
+                        return self.make_answer(draw, True)
                     self.dist[j][k] = min(self.dist[j][k], self.dist[j][i] + self.dist[i][k])
         return self.make_answer(draw)
