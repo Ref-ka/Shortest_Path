@@ -1,5 +1,3 @@
-import time
-
 import customtkinter as tk
 from PIL import Image
 
@@ -26,7 +24,7 @@ class View:
         # region
         input_frame = tk.CTkFrame(self.window, fg_color='#C2C2C2', height=100, border_color='#151E3D',
                                   border_width=3)
-        graph_vis_frame = tk.CTkFrame(self.window, fg_color='white', height=600, width=700)  # border_color='#151E3D', border_width=3
+        graph_vis_frame = tk.CTkFrame(self.window, fg_color='white', height=600, width=700)
         output_frame = tk.CTkFrame(self.window, fg_color='#C2C2C2', height=768, width=288, border_color='#151E3D',
                                    border_width=3)
         input_info_scrl_frame = tk.CTkScrollableFrame(input_frame, fg_color='#DCDCDC', width=170, height=280)
@@ -102,7 +100,8 @@ class View:
         input_info_label = tk.CTkLabel(input_frame, text='Здесь будет\nвведенная информация',
                                        font=tk.CTkFont('Gill Sans', 15, weight='bold'), text_color='#151E3D')
         self.input_info_scrl_label = tk.CTkLabel(input_info_scrl_frame, text='',
-                                      font=tk.CTkFont('Courier New', 17, weight='bold'), text_color='#151E3D')
+                                                 font=tk.CTkFont('Courier New', 17, weight='bold'),
+                                                 text_color='#151E3D')
         output_label_1 = tk.CTkLabel(output_subframe_1, text='     Здесь будет ответ     ',
                                      font=tk.CTkFont('Gill Sans', 17, weight='bold'), text_color='#151E3D')
         entry_label = tk.CTkLabel(input_frame, text='Ввод вершин и весов',
@@ -111,7 +110,7 @@ class View:
                                 font=tk.CTkFont('Gill Sans', 15, weight='bold'), text_color='#151E3D')
         self.image_label = tk.CTkLabel(graph_vis_frame, text='', height=768, width=812)
         self.src_info_label = tk.CTkLabel(input_frame, text='Начальная вершина:\n',
-                                     font=tk.CTkFont('Gill Sans', 15, weight='bold'), text_color='#151E3D')
+                                          font=tk.CTkFont('Gill Sans', 15, weight='bold'), text_color='#151E3D')
         self.vertex_count_label = tk.CTkLabel(input_frame, text='Количество вершин:\n',
                                               font=tk.CTkFont('Gill Sans', 15, weight='bold'), text_color='#151E3D')
         output_label_2 = tk.CTkLabel(output_subframe_2, text='Здесь будут шаги\nвыполнения алгоритма',
@@ -129,10 +128,14 @@ class View:
         # endregion
 
         # Textbox
-        self.output_textbox_1 = tk.CTkTextbox(output_subframe_1, wrap='none', font=tk.CTkFont('Courier New', 17, weight='bold'),
-                                         width=300, state='disable', fg_color='#DCDCDC', text_color='#151E3D', height=300)
-        self.output_textbox_2 = tk.CTkTextbox(output_subframe_2, wrap='none', font=tk.CTkFont('Courier New', 17, weight='bold'),
-                                         width=300, state='disable', fg_color='#DCDCDC', text_color='#151E3D', height=300)
+        self.output_textbox_1 = tk.CTkTextbox(output_subframe_1, wrap='none',
+                                              font=tk.CTkFont('Courier New', 17, weight='bold'),
+                                              width=300, state='disable',
+                                              fg_color='#DCDCDC', text_color='#151E3D', height=300)
+        self.output_textbox_2 = tk.CTkTextbox(output_subframe_2, wrap='none',
+                                              font=tk.CTkFont('Courier New', 17, weight='bold'),
+                                              width=300, state='disable',
+                                              fg_color='#DCDCDC', text_color='#151E3D', height=300)
 
         self.output_textbox_1.grid_propagate(False)
         self.output_textbox_2.grid_propagate(False)
