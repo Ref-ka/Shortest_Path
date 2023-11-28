@@ -27,14 +27,12 @@ class Back:
         if file_path:
             self.clear()
             with open(file_path, 'r') as file:
-                start = time.monotonic()
                 data = file.readlines()
                 for i, line in enumerate(data):
                     if i == len(data) - 1:
                         self.input_connection_command(self, line.replace('\n', ''), True)
                     else:
                         self.input_connection_command(self, line.replace('\n', ''))
-                print(f'load_connection_time: {time.monotonic() - start}')
 
     def input_connection_command(self, var, file_var=None, last=None):
         try:
