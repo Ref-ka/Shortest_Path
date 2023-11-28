@@ -164,8 +164,6 @@ class View:
         self.src_entry.delete(0, 'end')
         self.src_info_label.configure(text=f'Начальная вершина:\n{str(src)}')
 
-    # Команда получения ответа
-
     def show_answer(self, ans, history, buf, wfi):
         self.output_textbox_1.configure(state='normal')
         self.output_textbox_2.configure(state='normal')
