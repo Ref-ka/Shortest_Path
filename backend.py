@@ -2,7 +2,6 @@ from graph_class import Graph
 from front import View, make_new_window
 from info_class import Info
 from tkinter import filedialog
-import time
 import cProfile
 
 
@@ -17,7 +16,7 @@ class Back:
 
     def get_answer(self, wfi=False):
         if self.info.get_connections() and ((self.info.get_src() is not None) or wfi):
-            ans, history, buf = back.make_graph(wfi)
+            ans, history, buf = self._make_graph(wfi)
             self.view.show_answer(ans, history, buf, wfi)
         else:
             make_new_window('Вы не ввели некоторые данные!\n''Проверьте все колонки ввода!')
@@ -75,7 +74,7 @@ class Back:
         except ValueError:
             make_new_window('Данные введены неверно!')
 
-    def make_graph(self, wfi) -> tuple:
+    def _make_graph(self, wfi) -> tuple:
         draw = self.view.draw_switch.get()
         g = Graph(self.info.get_vertexes_count())
         for line in self.info.get_connections():
