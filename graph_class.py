@@ -7,13 +7,13 @@ from collections import deque
 set_option('display.max_rows', None, 'display.max_columns', None)
 
 
-def make_matrix(dist, history) -> tuple:
+def make_matrix(dist, history) -> tuple:  # Make DataFrame from list for good visualisation
     if history:
         history = DataFrame(list(x for x in history)).set_axis(list(f'Шаг {x}' for x in range(1, len(history) + 1)))
     return DataFrame(list(x for x in dist)), history
 
 
-def make_image(g) -> BytesIO:
+def make_image(g) -> BytesIO:  # Make and save an image from graph for its visualisation
     g_vis = nx.DiGraph(directed=True)  # Make visualisation
 
     edge_labels = {}  # Add vertexes and edges to visualisation
@@ -53,21 +53,22 @@ class Graph:
 
     def make_answer(self, draw) -> tuple:
         matrices = make_matrix(self.dist, self.history)
-        if draw:
+        if draw:  # Check if we don't need a visualisation of graph
             return matrices[0], matrices[1], None
         else:
             return matrices[0], matrices[1], make_image(self)
 
     def spfa(self, src, draw) -> tuple:
-        self.dist = [float('inf')] * self.V
+        self.dist = [float('inf')] * self.V  # Make a default list of distances between vertexes
         self.dist[src] = 0
-        q = deque()
+
+        q = deque()  # Make a queue for updated vertexes
         q.append(src)
-        counter = 0
-        self.history.append(self.dist[:])
-        length = {}
+
+        self.history.append(self.dist[:])  # List for save history of algorythm steps
+
+        length = {}  # Dict for check if there is negative cycle in graph
         while q:
-            counter += 1
             u = q.popleft()
             if u in self.graph:
                 for v, w in self.graph[u]:
@@ -81,7 +82,6 @@ class Graph:
                                 length[v] += 1
                             if length[v] == self.V:
                                 return DataFrame(), ''
-                            counter += 1
             self.history.append(self.dist[:])
         return self.make_answer(draw)
 
