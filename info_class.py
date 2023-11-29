@@ -36,11 +36,14 @@ class Info:
     def insert_src(self, src):
         self.src = src
 
-    def connection_check(self, line) -> bool:
-        if line in self.connections:
-            return True
-        else:
-            return False
+    def connection_check(self, line) -> tuple:
+        for connection in self.connections:
+            if line[:2] == connection[:2]:
+                if line[2] == connection[2]:
+                    return True, False
+                else:
+                    return True, True
+        return False, False
 
     def clear(self):
         self.connections = []

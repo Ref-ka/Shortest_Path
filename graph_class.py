@@ -7,9 +7,11 @@ from collections import deque
 set_option('display.max_rows', None, 'display.max_columns', None)
 
 
-def make_matrix(dist, history) -> tuple:  # Make DataFrame from list for good visualisation
+def make_matrix(dist, history, src) -> tuple:  # Make DataFrame from list for good visualisation
     if history:
         history = DataFrame(list(x for x in history)).set_axis(list(f'Шаг {x}' for x in range(1, len(history) + 1)))
+    if src:
+        return DataFrame(list(x for x in dist)).set_axis(list(str(src)), axis='columns'), history
     return DataFrame(list(x for x in dist)), history
 
 
@@ -51,10 +53,10 @@ class Graph:
         self.graph[u].append([v, w])
         self.graph[u] = sorted(self.graph[u])
 
-    def make_answer(self, draw, negative_cycle=None) -> tuple:
+    def make_answer(self, draw, negative_cycle=None, src=None) -> tuple:
         if negative_cycle:
             return DataFrame(), '', None
-        matrices = make_matrix(self.dist, self.history)
+        matrices = make_matrix(self.dist, self.history, src)
         if draw:  # Check if we don't need a visualisation of graph
             return matrices[0], matrices[1], None
         else:
@@ -85,7 +87,7 @@ class Graph:
                             if length[v] == self.V:
                                 return self.make_answer(draw, True)
             self.history.append(self.dist[:])
-        return self.make_answer(draw)
+        return self.make_answer(draw, src=src)
 
     def wfi(self, draw) -> tuple:
         for i in range(self.V):

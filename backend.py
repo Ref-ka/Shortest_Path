@@ -43,21 +43,25 @@ class Back:
             make_new_window('Введенные или загруженные\nданные неверны!')
             var = None
         if var and len(var) == 3 and var[0] != var[1]:
-            if not self.info.connection_check(var):
-                self.info.insert_connection(var)
-                if last:
+            checked, already_exist = self.info.connection_check(var)
+            if already_exist:
+                make_new_window('Вы ввели связь, которая уже существовала!\nСначала удалите старую связь!')
+            else:
+                if not checked:
+                    self.info.insert_connection(var)
+                    if last:
+                        new_info = ''
+                        for line in self.info.get_connections():
+                            new_info += ' '.join(str(x) for x in line) + '\n'
+                        self.view.change_input_info_scrl_label(new_info)
+                    if not file_var:
+                        self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
+                else:
+                    self.info.delete_connection(var)
                     new_info = ''
                     for line in self.info.get_connections():
                         new_info += ' '.join(str(x) for x in line) + '\n'
                     self.view.change_input_info_scrl_label(new_info)
-                if not file_var:
-                    self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
-            else:
-                self.info.delete_connection(var)
-                new_info = ''
-                for line in self.info.get_connections():
-                    new_info += ' '.join(str(x) for x in line) + '\n'
-                self.view.change_input_info_scrl_label(new_info)
         else:
             make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
                             'Вы можете очистить эти данные или продолжить работать с ними')
