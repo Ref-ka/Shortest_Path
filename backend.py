@@ -47,14 +47,7 @@ class Back:
                 make_new_window('Вы ввели связь, которая уже существовала!\nСначала удалите старую связь!')
             else:
                 if not checked:
-                    self.info.insert_connection(var)
-                    if last:
-                        new_info = ''
-                        for line in self.info.get_connections():
-                            new_info += ' '.join(str(x) for x in line) + '\n'
-                        self.view.change_input_info_scrl_label(new_info)
-                    if not file_var:
-                        self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
+                    self.insert_connection(var, last, file_var)
                 else:
                     self.info.delete_connection(var)
                     new_info = ''
@@ -65,6 +58,16 @@ class Back:
             make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
                             'Вы можете очистить эти данные или продолжить работать с ними')
         self.view.change_vertex_count_label(self.info.get_vertexes_count())
+
+    def insert_connection(self, var, last, file_var=None):
+        self.info.insert_connection(var)
+        if last:
+            new_info = ''
+            for line in self.info.get_connections():
+                new_info += ' '.join(str(x) for x in line) + '\n'
+            self.view.change_input_info_scrl_label(new_info)
+        if not file_var:
+            self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
 
     def input_src(self, src):
         try:
