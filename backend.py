@@ -29,11 +29,11 @@ class Back:
                 data = file.readlines()
                 for i, line in enumerate(data):
                     if i == len(data) - 1:
-                        self.input_connection_command(self, line.replace('\n', ''), True)
+                        self.input_connection(self, line.replace('\n', ''), True)
                     else:
-                        self.input_connection_command(self, line.replace('\n', ''))
+                        self.input_connection(self, line.replace('\n', ''))
 
-    def input_connection_command(self, var, file_var=None, last=None):
+    def input_connection(self, var, file_var=None, last=None):
         try:
             if not file_var:
                 var = list(map(int, var))
@@ -67,7 +67,7 @@ class Back:
                             'Вы можете очистить эти данные или продолжить работать с ними')
         self.view.change_vertex_count_label(self.info.get_vertexes_count())
 
-    def input_src_command(self, src):
+    def input_src(self, src):
         try:
             src = int(src)
             if src in self.info.get_vertexes():

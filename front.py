@@ -54,12 +54,12 @@ class View:
         # region
         input_connection_button = tk.CTkButton(input_frame, text='Ввод',
                                                command=lambda:
-                                               back.input_connection_command(self.input_entry.get().split()),
+                                               back.input_connection(self.input_entry.get().split()),
                                                fg_color='#29BCFF',
                                                text_color='#151E3D',
                                                font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
         input_src_button = tk.CTkButton(input_frame, text='Ввод',
-                                        command=lambda: back.input_src_command(self.src_entry.get()),
+                                        command=lambda: back.input_src(self.src_entry.get()),
                                         fg_color='#29BCFF',
                                         text_color='#151E3D',
                                         font=tk.CTkFont('Gill Sans', 13, weight='bold'), hover_color='#1CA1DF')
