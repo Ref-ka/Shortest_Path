@@ -5,10 +5,40 @@ from tkinter import filedialog
 import cProfile
 
 
+def connection_verification(var, file_var):
+    exception = 0
+    try:
+        if not file_var:
+            var = list(map(int, var))
+        else:
+            var = list(map(int, file_var.split()))
+    except ValueError:
+        var = None
+    if not var:
+        exception = 1
+    elif len(var) != 3:
+        exception = 2
+    elif var[0] == var[1]:
+        exception = 3
+    if exception != 0 and file_var:
+        return None
+    match exception:
+        case 0:
+            return var
+        case 1:
+            make_new_window('Не все введенные являются числами!')
+        case 2:
+            make_new_window('Введенные данные должны состоять из трех чисел!')
+        case 3:
+            make_new_window('В графе не должно быть петель!')
+    return None
+
+
 class Back:
     def __init__(self, view, info):
         self.view = view
         self.info = info
+        self.file_exception = False
 
     def start(self):
         self.view.setup(self)
@@ -32,22 +62,14 @@ class Back:
                         self.input_connection(self, line.replace('\n', ''), True)
                     else:
                         self.input_connection(self, line.replace('\n', ''))
+        if self.file_exception:
+            make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
+                            'Вы можете очистить этот список или продолжить работать с ним')
+            self.file_exception = False
 
     def input_connection(self, var, file_var=None, last=None):
-        try:
-            if not file_var:
-                var = list(map(int, var))
-            else:
-                var = list(map(int, file_var.split()))
-        except ValueError:
-            var = None
-        if not var:
-            make_new_window('Не все введенные являются числами!')
-        elif len(var) != 3:
-            make_new_window('Введенные данные должны состоять из трех чисел!')
-        elif var[0] == var[1]:
-            make_new_window('В графе не должно быть петель!')
-        else:
+        var = connection_verification(var, file_var)
+        if var:
             checked, already_exist = self.info.connection_check(var)
             if already_exist:
                 make_new_window('Вы ввели связь, которая уже существовала!\nСначала удалите старую связь!')
@@ -56,9 +78,9 @@ class Back:
                     self.insert_connection(var, last, file_var)
                 else:  # Connection exist and we delete this connection
                     self.delete_connection(var)
-        # else:
-        #     make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
-        #                     'Вы можете очистить эти данные или продолжить работать с ними')
+        else:
+            if file_var:
+                self.file_exception = True
 
     def insert_connection(self, var, last, file_var=None):
         self.info.insert_connection(var)
