@@ -7,20 +7,20 @@ import cProfile
 
 def connection_verification(var, file_var):
     exception = 0
-    try:
+    try:  # Convert var from str to int and exception if we can't
         if not file_var:
             var = list(map(int, var))
         else:
             var = list(map(int, file_var.split()))
     except ValueError:
         var = None
-    if not var:
+    if not var:  # Wrong type
         exception = 1
-    elif len(var) != 3:
+    elif len(var) != 3:  # Amount of numbers isn't 3
         exception = 2
-    elif var[0] == var[1]:
+    elif var[0] == var[1]:  # Entered a self-loop
         exception = 3
-    if exception != 0 and file_var:
+    if exception != 0 and file_var:  # If there is exceptions and we loading file, we don't make exception windows
         return None
     match exception:
         case 0:
@@ -68,36 +68,36 @@ class Back:
             self.file_exception = False
 
     def input_connection(self, var, file_var=None, last=None):
-        var = connection_verification(var, file_var)
+        var = connection_verification(var, file_var)  # Check if connection was entered wrong
         if var:
-            checked, already_exist = self.info.connection_check(var)
-            if already_exist:
+            checked, already_exist = self.info.connection_check(var)  # Check if connection already in info
+            if already_exist:  # Connection exist but with another weight
                 make_new_window('Вы ввели связь, которая уже существовала!\nСначала удалите старую связь!')
             else:
                 if not checked:  # Connection doesn't exist and we insert this connection
-                    self.insert_connection(var, last, file_var)
+                    self.insert_connection(var, last)
                 else:  # Connection exist and we delete this connection
                     self.delete_connection(var)
         else:
-            if file_var:
+            if file_var:  # Remember that we got exception while we were loading a file
                 self.file_exception = True
 
-    def insert_connection(self, var, last, file_var=None):
+    def insert_connection(self, var, last):
         self.info.insert_connection(var)
-        if last:
+        if last:  # If we get the last connection in file
             new_info = ''
             for line in self.info.get_connections():
                 new_info += ' '.join(str(x) for x in line) + '\n'
             self.view.change_input_info_scrl_label(new_info)
             self.view.change_vertex_count_label(self.info.get_vertexes_count())
-        if not file_var:
+        else:
             self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
             self.view.change_vertex_count_label(self.info.get_vertexes_count())
 
     def delete_connection(self, var):
         self.info.delete_connection(var)
         new_info = ''
-        for line in self.info.get_connections():
+        for line in self.info.get_connections():  # Make new list of connection but without deleted one
             new_info += ' '.join(str(x) for x in line) + '\n'
         self.view.change_input_info_scrl_label(new_info)
         self.view.change_vertex_count_label(self.info.get_vertexes_count())
@@ -114,7 +114,7 @@ class Back:
             make_new_window('Данные введены неверно!')
 
     def _make_graph(self, wfi) -> tuple:
-        draw = self.view.draw_switch.get()
+        draw = self.view.draw_switch.get()  # Check if we need to draw a graph or not
         g = Graph(self.info.get_vertexes_count())
         for line in self.info.get_connections():
             g.add_edge(line[0], line[1], line[2])
