@@ -15,20 +15,20 @@ class Back:
         self.view.start_main_loop()
 
     def get_answer(self, wfi=False):
-        if self.info.get_connections() and ((self.info.get_src() is not None) or wfi):
-            ans, history, buf = self._make_graph(wfi)
-            self.view.show_answer(ans, history, buf, wfi)
-        else:
+        if self.info.get_connections() and ((self.info.get_src() is not None) or wfi):  # If all needed info exist
+            ans, history, buf = self._make_graph(wfi)  # Get data and image for visualisation
+            self.view.show_answer(ans, history, buf, wfi)  # Visualisation of answer
+        else:  # Exception if some of needed info doesn't exist
             make_new_window('Вы не ввели некоторые данные!\n''Проверьте все колонки ввода!')
 
     def load_file(self):
         file_path = filedialog.askopenfilename()
-        if file_path:
-            self.clear()
-            with open(file_path, 'r') as file:
+        if file_path:  # If file path was chosen
+            self.clear()  # Clear all old information
+            with open(file_path, 'r') as file:  # Read chosen file
                 data = file.readlines()
                 for i, line in enumerate(data):
-                    if i == len(data) - 1:
+                    if i == len(data) - 1:  # Check for
                         self.input_connection(self, line.replace('\n', ''), True)
                     else:
                         self.input_connection(self, line.replace('\n', ''))
