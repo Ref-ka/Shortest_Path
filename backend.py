@@ -40,7 +40,6 @@ class Back:
             else:
                 var = list(map(int, file_var.split()))
         except ValueError:
-            make_new_window('Введенные или загруженные\nданные неверны!')
             var = None
         if var and len(var) == 3 and var[0] != var[1]:
             checked, already_exist = self.info.connection_check(var)
