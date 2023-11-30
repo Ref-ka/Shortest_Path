@@ -150,7 +150,7 @@ class View:
 
         self.draw_switch.grid(row=12, pady=7)
 
-    def change_input_info_scrl_label(self, text, add=False):
+    def change_input_info_scrl_label(self, text, add=False):  # Change the field with input connections
         if add:
             self.input_info_scrl_label.configure(text=self.input_info_scrl_label.cget('text') + text)
         else:
@@ -165,37 +165,39 @@ class View:
         self.src_info_label.configure(text=f'Начальная вершина:\n{str(src)}')
 
     def show_answer(self, ans, history, buf, wfi):
-        self.output_textbox_1.configure(state='normal')
+        self.output_textbox_1.configure(state='normal')  # Open text boxes
         self.output_textbox_2.configure(state='normal')
 
-        self.output_textbox_1.delete('0.0', 'end')
+        self.output_textbox_1.delete('0.0', 'end')  # Clear text boxes
         self.output_textbox_2.delete('0.0', 'end')
 
-        if ans.empty:
+        if ans.empty:  # Check if we get empty data (equals exist of negative cycle in graph)
             ans = 'В графе есть\nотрицательный цикл!'
         elif not wfi:
             ans = ans.T
 
-        self.output_textbox_1.insert('0.0', ans)
+        self.output_textbox_1.insert('0.0', ans)  # Write an answer in text boxes
 
         self.output_textbox_2.insert('0.0', history)
 
-        self.output_textbox_1.configure(state='disable')
+        self.output_textbox_1.configure(state='disable')  # Close text boxes
         self.output_textbox_2.configure(state='disable')
-        if buf:
+        if buf:  # Load an image from buf
             image = tk.CTkImage(dark_image=Image.open(buf), size=(700, 620))
             self.image_label.configure(image=image)
 
-    def clear(self):
+    def clear(self):  # Clear all output fields
         self.input_info_scrl_label.configure(text='')
         self.src_info_label.configure(text='Начальная вершина:\n')
         self.vertex_count_label.configure(text='Количество вершин:\n')
+
         self.output_textbox_1.configure(state='normal')
         self.output_textbox_2.configure(state='normal')
         self.output_textbox_1.delete('0.0', 'end')
         self.output_textbox_2.delete('0.0', 'end')
         self.output_textbox_1.configure(state='disable')
         self.output_textbox_2.configure(state='disable')
+
         self.image_label.configure(image=None)
 
     def start_main_loop(self):
