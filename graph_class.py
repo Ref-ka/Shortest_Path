@@ -53,7 +53,7 @@ class Graph:
         self.connections[u].append([v, w])
         self.connections[u] = sorted(self.connections[u])
 
-    def make_answer(self, draw, negative_cycle=None, src=None) -> tuple:  # Connect the data and make answer
+    def _make_answer(self, draw, negative_cycle=None, src=None) -> tuple:  # Connect the data and make answer
         if negative_cycle:  # Return empty data if negative cycle was found
             return DataFrame(), '', None
         matrices = make_matrix(self.dist, self.history, src)
@@ -85,9 +85,9 @@ class Graph:
                             else:
                                 length[v] += 1
                             if length[v] == self.V:
-                                return self.make_answer(draw, True)
+                                return self._make_answer(draw, True)
             self.history.append(self.dist[:])
-        return self.make_answer(draw, src=src)
+        return self._make_answer(draw, src=src)
 
     def wfi(self, draw) -> tuple:
         for i in range(self.V):  # Make a default matrix
@@ -100,6 +100,6 @@ class Graph:
             for j in range(self.V):
                 for k in range(self.V):
                     if self.dist[k][k] < 0:
-                        return self.make_answer(draw, True)
+                        return self._make_answer(draw, True)
                     self.dist[j][k] = min(self.dist[j][k], self.dist[j][i] + self.dist[i][k])
-        return self.make_answer(draw)
+        return self._make_answer(draw)
