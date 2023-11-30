@@ -41,19 +41,24 @@ class Back:
                 var = list(map(int, file_var.split()))
         except ValueError:
             var = None
-        if var and len(var) == 3 and var[0] != var[1]:
+        if not var:
+            make_new_window('Не все введенные являются числами!')
+        elif len(var) != 3:
+            make_new_window('Введенные данные должны состоять из трех чисел!')
+        elif var[0] == var[1]:
+            make_new_window('В графе не должно быть петель!')
+        else:
             checked, already_exist = self.info.connection_check(var)
             if already_exist:
                 make_new_window('Вы ввели связь, которая уже существовала!\nСначала удалите старую связь!')
             else:
-                if not checked:
+                if not checked:  # Connection doesn't exist and we insert this connection
                     self.insert_connection(var, last, file_var)
-                else:
+                else:  # Connection exist and we delete this connection
                     self.delete_connection(var)
-        else:
-            make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
-                            'Вы можете очистить эти данные или продолжить работать с ними')
-        self.view.change_vertex_count_label(self.info.get_vertexes_count())
+        # else:
+        #     make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
+        #                     'Вы можете очистить эти данные или продолжить работать с ними')
 
     def insert_connection(self, var, last, file_var=None):
         self.info.insert_connection(var)
@@ -62,8 +67,10 @@ class Back:
             for line in self.info.get_connections():
                 new_info += ' '.join(str(x) for x in line) + '\n'
             self.view.change_input_info_scrl_label(new_info)
+            self.view.change_vertex_count_label(self.info.get_vertexes_count())
         if not file_var:
             self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
+            self.view.change_vertex_count_label(self.info.get_vertexes_count())
 
     def delete_connection(self, var):
         self.info.delete_connection(var)
@@ -71,6 +78,7 @@ class Back:
         for line in self.info.get_connections():
             new_info += ' '.join(str(x) for x in line) + '\n'
         self.view.change_input_info_scrl_label(new_info)
+        self.view.change_vertex_count_label(self.info.get_vertexes_count())
 
     def input_src(self, src):
         try:
