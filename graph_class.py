@@ -19,10 +19,10 @@ def make_image(g) -> BytesIO:  # Make and save an image from graph for its visua
     g_vis = nx.DiGraph(directed=True)  # Make visualisation
 
     edge_labels = {}  # Add vertexes and edges to visualisation
-    for ver in g.graph:
+    for ver in g.connections:
         g_vis.add_node(ver)
-    for ver1 in g.graph:
-        for line in g.graph[ver1]:
+    for ver1 in g.connections:
+        for line in g.connections[ver1]:
             g_vis.add_edge(ver1, line[0])
             edge_labels[(ver1, line[0])] = line[1]
 
@@ -43,15 +43,15 @@ class Graph:
 
     def __init__(self, vertices):
         self.V = vertices
-        self.graph = {}
+        self.connections = {}
         self.dist = []
         self.history = []
 
     def add_edge(self, u, v, w):
-        if u not in self.graph:
-            self.graph[u] = []
-        self.graph[u].append([v, w])
-        self.graph[u] = sorted(self.graph[u])
+        if u not in self.connections:
+            self.connections[u] = []
+        self.connections[u].append([v, w])
+        self.connections[u] = sorted(self.connections[u])
 
     def make_answer(self, draw, negative_cycle=None, src=None) -> tuple:  # Connect the data and make answer
         if negative_cycle:  # Return empty data if negative cycle was found
@@ -74,8 +74,8 @@ class Graph:
         length = {}  # Dict for check if there is negative cycle in graph
         while q:
             u = q.popleft()
-            if u in self.graph:
-                for v, w in self.graph[u]:
+            if u in self.connections:
+                for v, w in self.connections[u]:
                     if self.dist[u] != float('inf') and self.dist[u] + w < self.dist[v]:
                         self.dist[v] = self.dist[u] + w
                         if v not in q:
@@ -93,8 +93,8 @@ class Graph:
         for i in range(self.V):  # Make a default matrix
             self.dist.append([float('inf')] * self.V)
             self.dist[i][i] = 0
-        for i in self.graph:  # Add available connections to default matrix
-            for j, k in self.graph[i]:
+        for i in self.connections:  # Add available connections to default matrix
+            for j, k in self.connections[i]:
                 self.dist[i][j] = k
         for i in range(self.V):
             for j in range(self.V):
