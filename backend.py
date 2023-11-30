@@ -49,11 +49,7 @@ class Back:
                 if not checked:
                     self.insert_connection(var, last, file_var)
                 else:
-                    self.info.delete_connection(var)
-                    new_info = ''
-                    for line in self.info.get_connections():
-                        new_info += ' '.join(str(x) for x in line) + '\n'
-                    self.view.change_input_info_scrl_label(new_info)
+                    self.delete_connection(var)
         else:
             make_new_window('В полученных данных есть ошибки!\nНекорректные данные были удалены из списка\n'
                             'Вы можете очистить эти данные или продолжить работать с ними')
@@ -68,6 +64,13 @@ class Back:
             self.view.change_input_info_scrl_label(new_info)
         if not file_var:
             self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
+
+    def delete_connection(self, var):
+        self.info.delete_connection(var)
+        new_info = ''
+        for line in self.info.get_connections():
+            new_info += ' '.join(str(x) for x in line) + '\n'
+        self.view.change_input_info_scrl_label(new_info)
 
     def input_src(self, src):
         try:
