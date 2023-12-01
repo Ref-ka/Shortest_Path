@@ -70,31 +70,21 @@ class Back:
             self.file_exception = False
 
     def input_connection(self, var, file_var=None, last=None):
-        input_connection_start = time.monotonic()
-        connection_verification_start = time.monotonic()
         var = connection_verification(var, file_var)  # Check if connection was entered wrong
-        print(f'connection_verification_time {time.monotonic() - connection_verification_start}')
         if var:
-            connection_check_start = time.monotonic()
             checked, already_exist = self.info.connection_check(var)  # Check if connection already in info
-            print(f'connection_check_time {time.monotonic() - connection_check_start}')
             if already_exist:  # Connection exist but with another weight
                 make_new_window('Вы ввели связь, которая уже существовала!\nСначала удалите старую связь!')
             else:
                 if not checked:  # Connection doesn't exist and we insert this connection
-                    insert_connection_start = time.monotonic()
-                    self.insert_connection(var, last)
-                    print(f'insert_connection_time {time.monotonic() - insert_connection_start}')
+                    self.insert_connection(var, last, file_var)
                 else:  # Connection exist and we delete this connection
-                    delete_connection_start = time.monotonic()
                     self.delete_connection(var)
-                    print(f'delete_connection_time {time.monotonic() - delete_connection_start}')
         else:
             if file_var:  # Remember that we got exception while we were loading a file
                 self.file_exception = True
-        print(f'input_connection_time {time.monotonic() - input_connection_start}')
 
-    def insert_connection(self, var, last):  # SO SLOW!!!!!!
+    def insert_connection(self, var, last, file_var):
         self.info.insert_connection(var)
         if last:  # If we get the last connection in file
             new_info = ''
@@ -102,7 +92,7 @@ class Back:
                 new_info += ' '.join(str(x) for x in line) + '\n'
             self.view.change_input_info_scrl_label(new_info)
             self.view.change_vertex_count_label(self.info.get_vertexes_count())
-        else:
+        if not file_var:
             self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
             self.view.change_vertex_count_label(self.info.get_vertexes_count())
 
