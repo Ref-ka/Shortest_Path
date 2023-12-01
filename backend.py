@@ -1,5 +1,3 @@
-import time
-
 from graph_class import Graph
 from front import View, make_new_window
 from info_class import Info
