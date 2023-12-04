@@ -41,8 +41,8 @@ def make_image(g) -> BytesIO:  # Make and save an image from graph for its visua
 
 class Graph:
 
-    def __init__(self, vertices):
-        self.V = vertices
+    def __init__(self, vertexes):
+        self.v_amount = vertexes
         self.connections = {}
         self.dist = []
         self.history = []
@@ -63,7 +63,7 @@ class Graph:
             return matrices[0], matrices[1], make_image(self)
 
     def spfa(self, src, draw) -> tuple:
-        self.dist = [float('inf')] * self.V  # Make a default list of distances between vertexes
+        self.dist = [float('inf')] * self.v_amount  # Make a default list of distances between vertexes
         self.dist[src] = 0
 
         q = deque()  # Make a queue for updated vertexes
@@ -84,21 +84,21 @@ class Graph:
                                 length[v] = 1
                             else:
                                 length[v] += 1
-                            if length[v] == self.V:
+                            if length[v] == self.v_amount:
                                 return self._make_answer(draw, True)
             self.history.append(self.dist[:])
         return self._make_answer(draw, src=src)
 
     def wfi(self, draw) -> tuple:
-        for i in range(self.V):  # Make a default matrix
-            self.dist.append([float('inf')] * self.V)
+        for i in range(self.v_amount):  # Make a default matrix
+            self.dist.append([float('inf')] * self.v_amount)
             self.dist[i][i] = 0
         for i in self.connections:  # Add available connections to default matrix
             for j, k in self.connections[i]:
                 self.dist[i][j] = k
-        for i in range(self.V):
-            for j in range(self.V):
-                for k in range(self.V):
+        for i in range(self.v_amount):
+            for j in range(self.v_amount):
+                for k in range(self.v_amount):
                     if self.dist[k][k] < 0:
                         return self._make_answer(draw, True)
                     self.dist[j][k] = min(self.dist[j][k], self.dist[j][i] + self.dist[i][k])
