@@ -75,14 +75,14 @@ class Back:
                 make_new_window('Вы ввели связь, которая уже существовала!\nСначала удалите старую связь!')
             else:
                 if not checked:  # Connection doesn't exist and we insert this connection
-                    self.insert_connection(var, last, file_var)
+                    self._insert_connection(var, last, file_var)
                 else:  # Connection exist and we delete this connection
-                    self.delete_connection(var)
+                    self._delete_connection(var)
         else:
             if file_var:  # Remember that we got exception while we were loading a file
                 self.file_exception = True
 
-    def insert_connection(self, var, last, file_var):
+    def _insert_connection(self, var, last, file_var):
         self.info.insert_connection(var)
         if last:  # If we get the last connection in file
             new_info = ''
@@ -94,7 +94,7 @@ class Back:
             self.view.change_input_info_scrl_label(' '.join(str(x) for x in var) + '\n', True)
             self.view.change_vertex_count_label(self.info.get_vertexes_count())
 
-    def delete_connection(self, var):
+    def _delete_connection(self, var):
         self.info.delete_connection(var)
         new_info = ''
         for line in self.info.get_connections():  # Make new list of connection but without deleted one
